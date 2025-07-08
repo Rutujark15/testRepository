@@ -1,11 +1,10 @@
-
 provider "aws" {
- region = var.region
+  region = var.region
 }
 
 resource "aws_instance" "example" {
- ami           = var.ami
- instance_type = var.instance_type  
+  ami           = var.ami
+  instance_type = var.instance_type
 
   tags = {
     Name = "ExampleInstance"
