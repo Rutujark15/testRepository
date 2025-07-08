@@ -1,8 +1,12 @@
-provider "aws" {
-  region = "us-east-1"
-}
 
-resource "aws_s3_bucket" "example" {
-  bucket = "my-terraform-bucket-example"
-  acl    = "private"
+provider "aws" {
+  region = var.region
+}
+resource "aws_instance" "example" {
+  ami           = var.ami
+  instance_type = var.instance_type
+
+  tags = {
+    Name = "ExampleInstance"
+  }
 }
