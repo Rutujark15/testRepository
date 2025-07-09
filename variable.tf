@@ -1,12 +1,17 @@
 variable "region" {
   description = "AWS region"
   type        = string
+  default     = "us-east-1"
 }
-variable "instance_type" {
-  description = "EC2 instance type"
+
+variable "bucket_name" {
+  description = "Name of the S3 bucket"
   type        = string
+  default     = "my-jenkins-terraform-bucket-example"
 }
-variable "ami" {
-  description = "AMI ID for the EC2 instance"
+
+variable "environment" {
+  description = "Deployment environment"
   type        = string
+  default     = "dev"
 }
