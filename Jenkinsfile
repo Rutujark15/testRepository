@@ -1,46 +1,26 @@
 pipeline {
     agent any
 
-    environment {
-        TF_VAR_region = 'us-east-1' // Example variable
-    }
-
     stages {
-        stage('Checkout') {
+        stage('Build') {
             steps {
-                git 'https://your-repo-url.git'
+                echo 'Building the project...'
+                // Add your build commands here, e.g., sh 'mvn clean install'
             }
         }
 
-        stage('Terraform Init') {
+        stage('Test') {
             steps {
-                sh 'terraform init'
+                echo 'Running tests...'
+                // Add your test commands here, e.g., sh 'mvn test'
             }
         }
 
-        stage('Terraform Validate') {
+        stage('Deploy') {
             steps {
-                sh 'terraform validate'
+                echo 'Deploying the application...'
+                // Add your deploy commands here, e.g., sh './deploy.sh'
             }
-        }
-
-        stage('Terraform Plan') {
-            steps {
-                sh 'terraform plan -out=tfplan'
-            }
-        }
-
-        stage('Terraform Apply') {
-            steps {
-                input "Approve Terraform Apply?"
-                sh 'terraform apply tfplan'
-            }
-        }
-    }
-
-    post {
-        always {
-            cleanWs()
         }
     }
 }
