@@ -1,26 +1,68 @@
 pipeline {
     agent any
 
+    environment {
+        TF_VAR_env = 'dev'
+        TF_BACKEND_CONFIG = 'backend.tfvars'
+    }
+
     stages {
         stage('Build') {
             steps {
                 echo 'Building the project...'
-                // Add your build commands here, e.g., sh 'mvn clean install'
+                // Example: sh 'mvn clean install'
             }
         }
 
         stage('Test') {
             steps {
                 echo 'Running tests...'
-                // Add your test commands here, e.g., sh 'mvn test'
+                // Example: sh 'mvn test'
+            }
+        }
+
+        stage('Terraform Init') {
+            steps {
+                echo 'Initializing Terraform...'
+                dir('terraform') {
+                    sh 'terraform init -backend-config=${TF_BACKEND_CONFIG}'
+                }
+            }
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                echo 'Planning Terraform changes...'
+                dir('terraform') {
+                    sh 'terraform plan -var="env=${TF_VAR_env}"'
+                }
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                input message: 'Approve Terraform Apply?'
+                echo 'Applying Terraform changes...'
+                dir('terraform') {
+                    sh 'terraform apply -auto-approve -var="env=${TF_VAR_env}"'
+                }
             }
         }
 
         stage('Deploy') {
             steps {
                 echo 'Deploying the application...'
-                // Add your deploy commands here, e.g., sh './deploy.sh'
+                // Example: sh './deploy.sh'
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Please check the logs.'
         }
     }
 }
