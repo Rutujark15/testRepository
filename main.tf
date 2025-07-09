@@ -1,12 +1,13 @@
 provider "aws" {
-  region = "us-east-2"
+  region = var.region
 }
 
-resource "aws_instance" "example" {
-  ami           = var.ami
-  instance_type = var.instance_type
+resource "aws_s3_bucket" "example" {
+  bucket = var.bucket_name
+  force_destroy = true
 
   tags = {
-    Name = "ExampleInstance"
+    Environment = var.environment
+    ManagedBy   = "Terraform"
   }
 }
